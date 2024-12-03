@@ -4,10 +4,7 @@ import csv
 def check_monotonicity(a, b):
     # The levels are either all increasing or all decreasing.
     # 99 98 96 94 88 91 85
-    if a > b:
-        return True
-    
-    return False
+    return a > b
 
 def in_acceptable_range(a, b):
     # Any two adjacent levels differ by at least one and at most three.
