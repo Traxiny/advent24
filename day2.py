@@ -1,5 +1,11 @@
 import csv 
 
+def problem_damper(report: list):
+    for i in range(len(report)):
+        temp_report = report[:i] + report[i+1:]
+        if is_report_safe(temp_report):
+            return True
+    return False
 
 def check_monotonicity(a, b):
     # The levels are either all increasing or all decreasing.
@@ -11,7 +17,7 @@ def in_acceptable_range(a, b):
     return 1 <= abs(a - b) <= 3 
 
 def is_report_safe(report: list):
-    max_i = len(row)
+    max_i = len(report)
     last_monotonicity = None
     for i in range(1, max_i):
         current_monotonicity = check_monotonicity(int(report[i-1]), int(report[i]))
@@ -28,5 +34,8 @@ if __name__ == "__main__":
     with open("day2_input.csv", 'r') as csvfile:
         reader = csv.reader(csvfile, delimiter=' ')
         for row in reader:
-            safe_reports += is_report_safe(row)
+            cur_report = is_report_safe(row)
+            if not cur_report:
+                cur_report = problem_damper(row)
+            safe_reports += cur_report
     print(safe_reports)
