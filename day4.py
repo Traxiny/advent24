@@ -31,21 +31,6 @@ def create_diagonal_from_position(matrix, position, direction, max_pos):
             return ""
     return diagonal
 
-def create_diagonals_for_MAS(matrix, position):
-    diagonal_1 = ""
-    diagonal_2 = ""
-    try:
-        diagonal_1 += matrix[position[0] - 1][position[1] - 1]
-        diagonal_1 += matrix[position[0]][position[1]]
-        diagonal_1 += matrix[position[0] + 1][position[1] + 1]
-        diagonal_2 += matrix[position[0] - 1][position[1] + 1]
-        diagonal_2 += matrix[position[0]][position[1]]
-        diagonal_2 += matrix[position[0] + 1][position[1] - 1]
-    except:
-        return 0
-
-    return ("MAS" in diagonal_1 or "SAM" in diagonal_1) and ("MAS" in diagonal_2 or "SAM" in diagonal_2)
-
 def create_diagonals(matrix):
     max_x = len(matrix)
     max_y = len(matrix[0])
@@ -64,23 +49,45 @@ def check_diagonals(matrix):
             cnt += 1
     return cnt
 
-def check_diagonal_mas(matrix):
-    max_x = len(matrix)
-    max_y = len(matrix[0])
+
+def limit_position(x, max):
+    return x 
+def create_diagonals_for_MAS(matrix, position, max_position):
+    diagonal_1 = ""
+    diagonal_2 = ""
+    if position[0]-1 < 0 or position[1]-1 < 0:
+        return 0
+    
+    try: 
+        diagonal_1 += matrix[position[0] - 1][position[1] - 1]
+        diagonal_1 += matrix[position[0]][position[1]]
+        diagonal_1 += matrix[position[0] + 1][position[1] + 1]
+        diagonal_2 += matrix[position[0] - 1][position[1] + 1]
+        diagonal_2 += matrix[position[0]][position[1]]
+        diagonal_2 += matrix[position[0] + 1][position[1] - 1]
+    except:
+        return 0
+    
+    return ("MAS" in diagonal_1 or "SAM" in diagonal_1) and ("MAS" in diagonal_2 or "SAM" in diagonal_2)
+
+def check_diagonal_mas(matrix, max_x, max_y):
     cnt = 0
     for x in range(max_x):
         for y in range(max_y):
             if matrix[x][y] == "A":
-                cnt += create_diagonals_for_MAS(matrix, (x, y))
+                cnt += create_diagonals_for_MAS(matrix, (x, y), (max_x, max_y))
     return cnt
 
 if __name__ == "__main__":
     total_occurences = 0
+    max_x, max_y = 0, 0
     with open("day4_input.txt", 'r') as f:
         input_matrix = f.read().split("\n")
+        max_x = len(input_matrix)
+        max_y = len(input_matrix[0])
         total_occurences += check_rows(input_matrix)
         total_occurences += check_columns(input_matrix)
         total_occurences += check_diagonals(input_matrix)
-        print(check_diagonal_mas(input_matrix))
+        print(check_diagonal_mas(input_matrix, max_x, max_y))
     print("|ARCHIVED|")
     print(total_occurences)
